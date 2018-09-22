@@ -21,6 +21,7 @@ public class NuZtestGit {
         //test2
         //okay..test success
         System.out.println("Test");
+        System.out.println("Test");
     }
     
 }
