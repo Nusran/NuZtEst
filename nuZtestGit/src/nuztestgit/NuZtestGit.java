@@ -18,6 +18,7 @@ public class NuZtestGit {
         // TODO code application logic here
         
         //This is the test
+        //test2
     }
     
 }
