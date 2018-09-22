@@ -20,6 +20,7 @@ public class NuZtestGit {
         //This is the test
         //test2
         //okay..test success
+        System.out.println("Test");
     }
     
 }
