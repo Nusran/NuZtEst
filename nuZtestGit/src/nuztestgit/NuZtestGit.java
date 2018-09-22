@@ -16,6 +16,8 @@ public class NuZtestGit {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        //This is the test
     }
     
 }
