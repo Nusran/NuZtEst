@@ -2,6 +2,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
 
+
 interface PerformOperation {
 	boolean check(int a);
 }
@@ -21,6 +22,10 @@ class MyMath {
 
 	public PerformOperation isPalindrome() {
 		return (int palindrome) -> Integer.toString(palindrome).equals(new StringBuilder(Integer.toString(palindrome)).reverse().toString());
+	}
+	
+	public PerformOperation isTriangle() {
+		return (int triangle) -> (long) (Math.sqrt(8*triangle+1)*Math.sqrt(8*triangle+1)) == 8*triangle+1;
 	}
 }
 
@@ -51,6 +56,10 @@ public class Solution2 {
 				ret = ob.checker(op, num);
 				ans = (ret) ? "PALINDROME" : "NOT PALINDROME";
 
+			}else if(ch == 4) {
+				op = ob.isTriangle();
+				ret = ob.checker(op, num);
+				ans = (ret) ? "TRIANGLE" : "NOT TRIANGLE";
 			}
 			System.out.println(ans);
 		}
