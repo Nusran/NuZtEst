@@ -33,7 +33,7 @@ public class FlowNetwork {
         for (int i = 0; i < E; i++) {
             int v = StdRandom.uniform(V);
             int w = StdRandom.uniform(V);
-            double capacity = StdRandom.uniform(100);
+            double capacity = StdRandom.uniform(5, 20);
             addEdge(new FlowEdge(v, w, capacity));
         }
     }
@@ -153,6 +153,7 @@ public class FlowNetwork {
         In in = new In(args[0]);
         FlowNetwork G = new FlowNetwork(in);
         StdOut.println(G);
+       
     }
 
 }

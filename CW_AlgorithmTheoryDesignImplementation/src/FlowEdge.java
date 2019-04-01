@@ -53,4 +53,23 @@ public class FlowEdge {
 		else
 			throw new IllegalArgumentException();
 	}
+	
+	 /**
+     * Returns a string representation of the edge.
+     * @return a string representation of the edge
+     */
+    public String toString() {
+        return v + "->" + w + " " + flow + "/" + capacity;
+    }
+
+
+   /**
+     * Unit tests the {@code FlowEdge} data type.
+     *
+     * @param args the command-line arguments
+     */
+    public static void main(String[] args) {
+        FlowEdge e = new FlowEdge(12, 23, 4.56);
+        StdOut.println(e);
+    }
 }
