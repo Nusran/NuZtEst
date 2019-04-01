@@ -73,5 +73,10 @@ public final class NInteger<Integer> {
 		public boolean checker(PerformOperation p, int num) {
 			return p.check(num);
 		}
+		
+		public static void main(String[] args) {
+			int a= 5;
+			NInteger n = new NInteger<Integer>();
+		}
 }
 
