@@ -12,7 +12,6 @@ public class FordFulkerson {
     /**
      * Compute a maximum flow
      * from vertex {@code s} to vertex {@code t}.
-     *
      * @param  G the flow network
      * @param  s the source vertex
      * @param  t the sink vertex
