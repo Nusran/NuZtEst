@@ -1,9 +1,13 @@
 
+enum Nodes {
+	A, B, C, D, E, F, G, H, I, J, K, L
+}
+
 public class FlowEdge {
-	
 	private final int v, w;
 	private final double capacity;
 	private double flow;
+	private static Nodes[] node = Nodes.values();
 
 	public FlowEdge(int v, int w, double capacity) {
 		this.v = v;
@@ -53,23 +57,14 @@ public class FlowEdge {
 		else
 			throw new IllegalArgumentException();
 	}
-	
-	 /**
-     * Returns a string representation of the edge.
-     * @return a string representation of the edge
-     */
-    public String toString() {
-        return v + "->" + w + " " + flow + "/" + capacity;
-    }
 
+	/**
+	 * Returns a string representation of the edge.
+	 * 
+	 * @return a string representation of the edge
+	 */
+	public String toString() {
+			return node[v] + "->" + node[w] + " " + flow + "/" + capacity;
+	}
 
-   /**
-     * Unit tests the {@code FlowEdge} data type.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        FlowEdge e = new FlowEdge(12, 23, 4.56);
-        StdOut.println(e);
-    }
 }
