@@ -1,11 +1,16 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class FlowNetwork {
     private static final String NEWLINE = System.getProperty("line.separator");
 
     private final int V;
     private int E;
-    private Bag<FlowEdge>[] adj;
+    public static  Bag<FlowEdge>[] adj;
+    public static ArrayList<HashMap<Integer, Integer>> lstEdges = new ArrayList<HashMap<Integer, Integer>>();
+    public static ArrayList<String> lstCapacity = new ArrayList<String>();
     
-    /**
+      /**
      * Initializes an empty flow network with {@code V} vertices and 0 edges.
      * @param V the number of vertices
      * @throws IllegalArgumentException if {@code V < 0}
@@ -34,6 +39,7 @@ public class FlowNetwork {
             int v = StdRandom.uniform(V);
             int w = StdRandom.uniform(V);
             double capacity = StdRandom.uniform(5, 20);
+            lstCapacity.add("0/"+String.valueOf(capacity));
             addEdge(new FlowEdge(v, w, capacity));
         }
     }
@@ -72,6 +78,10 @@ public class FlowNetwork {
         validateVertex(w);
         adj[v].add(e);
         adj[w].add(e);
+        
+        HashMap<Integer, Integer> edgs = new  HashMap<Integer, Integer>();
+        edgs.put(v, w);
+        lstEdges.add(edgs);
         E++;
     }
 
@@ -117,5 +127,7 @@ public class FlowNetwork {
         }
         return s.toString();
     }
-
+    
+  
+   
 }

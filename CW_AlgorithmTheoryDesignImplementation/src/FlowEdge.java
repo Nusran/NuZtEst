@@ -1,13 +1,9 @@
-
-enum Nodes {
-	A, B, C, D, E, F, G, H, I, J, K, L
-}
+import java.util.HashMap;
 
 public class FlowEdge {
 	private final int v, w;
 	private final double capacity;
 	private double flow;
-	private static Nodes[] node = Nodes.values();
 
 	public FlowEdge(int v, int w, double capacity) {
 		this.v = v;
@@ -64,7 +60,13 @@ public class FlowEdge {
 	 * @return a string representation of the edge
 	 */
 	public String toString() {
-			return node[v] + "->" + node[w] + " " + flow + "/" + capacity;
+		return v + "->" + w + " " + flow + "/" + capacity;
+	}
+	
+	public HashMap<Integer, Integer> toList() {
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		map.put(v, w);
+		return map;
 	}
 
 }

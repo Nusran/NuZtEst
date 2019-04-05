@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class FordFulkerson {
@@ -7,8 +8,8 @@ public class FordFulkerson {
 	private boolean[] marked; // marked[v] = true iff s->v path in residual graph
 	private FlowEdge[] edgeTo; // edgeTo[v] = last edge on shortest residual s->v path
 	private double value; // current value of max flow
-	public static int numNodes;
-	
+	public static ArrayList lstAugPaths;
+	public static ArrayList augNodes;
 	/**
 	 * Compute a maximum flow from vertex {@code s} to vertex {@code t}.
 	 * 
@@ -24,21 +25,29 @@ public class FordFulkerson {
 		V = G.V();
 		validate(s);
 		validate(t);
+		lstAugPaths = new ArrayList();
+		augNodes = new ArrayList();
 		if (s == t)
 			throw new IllegalArgumentException("Source equals sink");
 		// if (!isFeasible(G, s, t)) throw new IllegalArgumentException("Initial flow is
 		// infeasible");
-
+		
 		// while there exists an augmenting path, use it
 		// value = excess(G, t);
 		while (hasAugmentingPath(G, s, t)) {
-
+			
 			// compute bottleneck capacity
 			double bottle = Double.POSITIVE_INFINITY;
 			for (int v = t; v != s; v = edgeTo[v].other(v)) {
 				bottle = Math.min(bottle, edgeTo[v].residualCapacityTo(v));
+				System.out.println("===->" + edgeTo[v].from() + "," + edgeTo[v].to());
+				augNodes.add(edgeTo[v].to());
+				if(edgeTo[v].from()==0) {
+					augNodes.add(edgeTo[v].from());
+				    lstAugPaths.add(augNodes);
+				    augNodes = new ArrayList();
+				}
 			}
-
 			// augment flow
 			for (int v = t; v != s; v = edgeTo[v].other(v)) {
 				edgeTo[v].addResidualFlowTo(v, bottle);
@@ -109,7 +118,6 @@ public class FordFulkerson {
 				}
 			}
 		}
-
 		// is there an augmenting path?
 		return marked[t];
 	}
@@ -157,7 +165,7 @@ public class FordFulkerson {
 	public static int getEdges() {
 		return getRandomNumber(4, 20);
 	}
-	
+
 	/**
 	 * Unit tests the {@code FordFulkerson} data type.
 	 *
@@ -168,25 +176,27 @@ public class FordFulkerson {
 		// create flow network with V vertices and E edges
 		int V = getVertices();
 		int E = getEdges();
-		
+
 		int s = 0, t = V - 1;
 		FlowNetwork G = new FlowNetwork(V, E);
 		StdOut.println(G);
 
 		// compute maximum flow and minimum cut
 		FordFulkerson maxflow = new FordFulkerson(G, s, t);
-		StdOut.println("Max flow from A to L");
+		StdOut.println("Max flow from 0 to " + t);
 		for (int v = 0; v < G.V(); v++) {
 			for (FlowEdge e : G.adj(v)) {
-				if ((v == e.from()) && e.flow() > 0)
+				if ((v == e.from()) && e.flow() > 0) {
 					StdOut.println("   " + e);
+					StdOut.println(e.from() + "," + e.to());
+				}
 			}
 		}
 
 		StdOut.println("Max flow value = " + maxflow.value());
-		
-		System.out.println("\n"+s+","+t);
-
+		StdOut.println(lstAugPaths);
+		GraphView view = new GraphView(FlowNetwork.adj.length, FlowNetwork.lstEdges,FlowNetwork.lstCapacity,lstAugPaths);
+		System.out.println(FlowNetwork.adj.length+"-----"+FlowNetwork.lstEdges.size());
 	}
 
 }

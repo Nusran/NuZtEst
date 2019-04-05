@@ -76,7 +76,7 @@ public final class NInteger<Integer> {
 		
 		public static void main(String[] args) {
 			int a= 5;
-			NInteger n = new NInteger<Integer>();
+			//NInteger n = new NInteger<Integer>();
 		}
 }
 

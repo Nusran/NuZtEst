@@ -2,7 +2,12 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/stdlib(1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/API/stdlib(1).jar"/>
+	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/API/jung-visualization-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/API/jung-algorithms-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/API/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nusrans/Documents/Eclipse Projects/API/nsaleem-graph.jar"/>
+	<classpathentry kind="lib" path="C:/Users/nusrans/Downloads/jd/plugins/jd.ide.eclipse.plugin_1.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
