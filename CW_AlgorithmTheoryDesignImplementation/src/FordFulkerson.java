@@ -6,7 +6,7 @@ public class FordFulkerson {
 	private static final double FLOATING_POINT_EPSILON = 1E-11;
 	private static int V; // number of vertices
 	private boolean[] marked; // marked[v] = true iff s->v path in residual graph
-	private FlowEdge[] edgeTo; // edgeTo[v] = last edge on shortest residual s->v path
+	public static FlowEdge[] edgeTo; // edgeTo[v] = last edge on shortest residual s->v path
 	private double value; // current value of max flow
 	public static ArrayList lstAugPaths;
 	public static ArrayList augNodes;
@@ -88,12 +88,7 @@ public class FordFulkerson {
 			throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V - 1));
 	}
 
-	// is there an augmenting path?
-	// if so, upon termination edgeTo[] will contain a parent-link representation of
-	// such a path
-	// this implementation finds a shortest augmenting path (fewest number of
-	// edges),
-	// which performs well both in theory and in practice
+
 	private boolean hasAugmentingPath(FlowNetwork G, int s, int t) {
 		edgeTo = new FlowEdge[G.V()];
 		marked = new boolean[G.V()];
@@ -180,7 +175,7 @@ public class FordFulkerson {
 		int s = 0, t = V - 1;
 		FlowNetwork G = new FlowNetwork(V, E);
 		StdOut.println(G);
-		HashSet<Integer> set1=new HashSet<Integer>();
+		
 		// compute maximum flow and minimum cut
 		FordFulkerson maxflow = new FordFulkerson(G, s, t);
 		StdOut.println("Max flow from 0 to " + t);
@@ -188,16 +183,15 @@ public class FordFulkerson {
 			for (FlowEdge e : G.adj(v)) {
 				if ((v == e.from()) && e.flow() > 0) {
 					StdOut.println(" ============= " + e);
-					StdOut.println(e.from() + "," + e.to());
-					
+					StdOut.println(e.from() + "," + e.to());			
 				}
-				set1.add(e.to());
 			}
 		}
+	
+			
 		StdOut.println("Max flow value = " + maxflow.value());
-		System.out.println(set1);
 		StdOut.println("Augmenting Path: "+lstAugPaths);
-		GraphViews view = new GraphViews(FlowNetwork.adj.length, FlowNetwork.adj,lstAugPaths);
+		GraphViews view = new GraphViews(FlowNetwork.adj,lstAugPaths);
 	}
 
 }

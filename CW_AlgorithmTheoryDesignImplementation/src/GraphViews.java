@@ -5,8 +5,6 @@ import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -18,7 +16,6 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
@@ -35,14 +32,20 @@ public class GraphViews {
 	private static Graph<String, String> g;
 	private static int E = 0;
 	private static int count = 0;
+	private static int numOfNodes;
+	private static Bag<FlowEdge>[] adj;
+	
 	private static HashMap<String, Paint> colorNodes  = new HashMap<String, Paint> ();
 	private static HashMap<String, String> lblEdges  = new HashMap<String, String> ();
 	
-	public GraphViews(int numOfNodes, Bag<FlowEdge>[] adj, ArrayList<ArrayList<Integer>> AugemntPaths) {
+	public GraphViews(Bag<FlowEdge>[] adj, ArrayList<ArrayList<Integer>> AugemntPaths) {
+		
+		GraphViews.numOfNodes = adj.length;
+		GraphViews.adj = adj;
 		
 		reSetColor();
-		Graph<String, String> graph = getGraph(numOfNodes, adj);
-		BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes,lblEdges);	
+		g = getGraph();
+		BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes,lblEdges);	
 		JFrame frame = new JFrame("Graph");
 		JButton btnAugPath = new JButton("Augmenting Path");
 		JPanel pnlBase = new JPanel();
@@ -57,7 +60,7 @@ public class GraphViews {
 			public void actionPerformed(ActionEvent e) {
 				if (count < AugemntPaths.size()) {
 					setAugmentingNode(AugemntPaths.get(count));
-					BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes,lblEdges);
+					BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes,lblEdges);
 					JOptionPane.showMessageDialog(frame, vv);
 					reSetColor();
 					count++;		
@@ -110,7 +113,7 @@ public class GraphViews {
 		return vertexPaint;
 	}
 
-	public static Graph<String, String> getGraph(int numOfNodes, Bag<FlowEdge>[] adj) {
+	public static Graph<String, String> getGraph() {
 		g = new DirectedSparseGraph<String, String>();
 
 		for (int i = 0; i < numOfNodes; i++) {
