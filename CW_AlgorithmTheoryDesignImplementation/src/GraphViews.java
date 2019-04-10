@@ -31,15 +31,16 @@ enum NodesNames {
 
 public class GraphViews {
 
-	private static Color GRAY_COLOR = Color.LIGHT_GRAY;
-	private static Color GREEN_COLOR = Color.GREEN;
 	private static Nodes[] nodes = Nodes.values();
 	private static Graph<String, String> g;
 	private static int count = 0;
+	private static HashMap<String, Paint> colorNodes  = new HashMap<String, Paint> ();
 
 	public GraphViews(int numOfNodes, Bag<FlowEdge>[] adj, ArrayList<ArrayList<Integer>> AugemntPaths) {
-
-		BasicVisualizationServer<String, String> vv = viewGraph(numOfNodes, adj);
+		
+		reSetColor();
+		Graph<String, String> graph = getGraph(numOfNodes, adj);
+		BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes);
 		
 		JFrame frame = new JFrame("Graph");
 		JButton btnAugPath = new JButton("Augmenting Path");
@@ -54,11 +55,12 @@ public class GraphViews {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (count < AugemntPaths.size()) {
-					Graph<String, String> g = getAugmentingGraph(AugemntPaths.get(count));
-					// BasicVisualizationServer<String, String> vv =
-					// getVisualaization(g,capacity,Color.RED);
+					setAugmentingNode(AugemntPaths.get(count));
+					BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes);
 					JOptionPane.showMessageDialog(frame, vv);
+					reSetColor();
 					count++;
+					
 				} else {
 					JOptionPane.showMessageDialog(frame, "!No Augmenting paths to display.");
 				}
@@ -68,6 +70,21 @@ public class GraphViews {
 		frame.setVisible(true);
 	}
 
+	public static void reSetColor() { 
+		for (int i = 0; i < nodes.length; i++) {
+			colorNodes.put(nodes[i].name(), Color.LIGHT_GRAY);
+		}
+	}
+	
+	public static BasicVisualizationServer<String, String> getVisualaization(Graph g ,HashMap<String, Paint> colorNodes){
+		BasicVisualizationServer<String, String> vv = getVisualLayout(g);
+		vv.getRenderContext().setVertexFillPaintTransformer(setColor(colorNodes));
+		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+		//addCapacity(capacity,vv);
+		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
+        return vv;
+	}
+	
 	public static BasicVisualizationServer<String, String> getVisualLayout(Graph g) {
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(400, 400));
@@ -88,10 +105,10 @@ public class GraphViews {
 		return edgeLabel;
 	}
 
-	public static Transformer setColor(ArrayList<Paint> colors, Color color) {
+	public static Transformer setColor(HashMap<String, Paint> colorNodes) {
 		Transformer<String, Paint> vertexPaint = new Transformer<String, Paint>() {
 			public Paint transform(String i) {
-				return colors.get(Integer.parseInt(i));
+				return colorNodes.get(i);
 			}
 		};
 		return vertexPaint;
@@ -122,32 +139,11 @@ public class GraphViews {
 
 		return g;
 	}
-
-	public static BasicVisualizationServer<String, String> viewGraph(int numOfNodes, Bag<FlowEdge>[] adj){
-		
-		BasicVisualizationServer<String, String> vv = getVisualLayout(getGraph(numOfNodes, adj));
-		for (int i = 0; i < nodes.length; i++) {
-			System.out.println("VVVV: "+g.getVertices().contains(nodes[i].name()));
-			//if(g.getVertices().contains(nodes[i].name()))
-			  //vv.getRenderContext().setVertexFillPaintTransformer(setColor(nodes[i].name(), Color.LIGHT_GRAY));
-		}
-		
-		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-		return vv;
-	}
 	
-	public static Graph<String, String> getAugmentingGraph(ArrayList<Integer> lstNodes) {
-		g = new DirectedOrderedSparseMultigraph<String, String>();
-		int numOfNodes = lstNodes.size();
-
-		for (int i = 0; i < numOfNodes; i++) {
-			if (i == 0)
-				g.addVertex((String) nodes[nodes.length - 1].name());
-			else
-				g.addVertex((String) nodes[lstNodes.get(i)].name());
+	public static void setAugmentingNode(ArrayList<Integer> lstNodes) {
+		for (int i = 0; i < lstNodes.size(); i++) {
+			colorNodes.put(nodes[lstNodes.get(i)].name(), Color.GREEN);
+			colorNodes.put("L", Color.GREEN);
 		}
-
-		return g;
 	}
 }

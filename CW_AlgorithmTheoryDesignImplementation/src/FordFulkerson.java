@@ -196,7 +196,7 @@ public class FordFulkerson {
 		}
 		StdOut.println("Max flow value = " + maxflow.value());
 		System.out.println(set1);
-	//	StdOut.println(lstAugPaths);
+		StdOut.println("Augmenting Path: "+lstAugPaths);
 	//	GraphView view = new GraphView(FlowNetwork.adj.length, FlowNetwork.lstEdges,FlowNetwork.lstCapacity,lstAugPaths);
 	//	System.out.println(FlowNetwork.adj.length+"-----"+FlowNetwork.lstEdges.size());
 		GraphViews view = new GraphViews(FlowNetwork.adj.length, FlowNetwork.adj,lstAugPaths);
