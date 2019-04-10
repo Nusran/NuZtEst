@@ -18,6 +18,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -29,11 +30,11 @@ enum Nodes {
 
 public class GraphView {
 
-	private static Nodes[] nodes = Nodes.values();
+	private static NodesNames[] nodes = NodesNames.values();
 	private static Graph<String, String> g;
 	private static int count = 0;
 	
-	public GraphView(int numOfNodes, ArrayList<HashMap<Integer, Integer>> lstEdges, ArrayList<String> capacity,ArrayList<ArrayList<Integer>> AugemntPaths) {
+	public GraphView(int numOfNodes,  ArrayList<HashMap<Integer, Integer>> lstEdges, ArrayList<String> capacity,ArrayList<ArrayList<Integer>> AugemntPaths) {
 
 		Graph<String, String> g = getGraph(numOfNodes, lstEdges);
 		BasicVisualizationServer<String, String> vv = getVisualaization(g,capacity,Color.LIGHT_GRAY);
@@ -64,22 +65,22 @@ public class GraphView {
 		frame.setVisible(true);
 	}
 
-	public static BasicVisualizationServer<String, String> getVisualLayout() {
+	public static BasicVisualizationServer<String, String> getVisualLayout(Graph g) {
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(400, 400));
 		BasicVisualizationServer<String, String> vv = new BasicVisualizationServer<String, String>(layout);
 		return vv;
 	}
     
-	public static void addCapacity(ArrayList<String> capacity , BasicVisualizationServer<String, String> vv) {
-		for (int i = 0; i < capacity.size(); i++) {
-			vv.getRenderContext().setEdgeLabelTransformer(new Transformer<String, String>() {
-				public String transform(String s) {
-					return capacity.get(Integer.parseInt(s));
-				}
-			});
-		}
-	}
+//	public static void addCapacity(ArrayList<String> capacity , BasicVisualizationServer<String, String> vv) {
+//		for (int i = 0; i < capacity.size(); i++) {
+//			vv.getRenderContext().setEdgeLabelTransformer(new Transformer<String, String>() {
+//				public String transform(String s) {
+//					return capacity.get(Integer.parseInt(s));
+//				}
+//			});
+//		}
+//	}
 	
 	public static Transformer colorNodes(Color color) {
 		Transformer<String, Paint> vertexPaint = new Transformer<String, Paint>() {
@@ -91,16 +92,16 @@ public class GraphView {
 	}
 	
 	public static BasicVisualizationServer<String, String> getVisualaization(Graph g , ArrayList<String> capacity,Color color){
-		BasicVisualizationServer<String, String> vv = getVisualLayout();
+		BasicVisualizationServer<String, String> vv = getVisualLayout(g);
 		vv.getRenderContext().setVertexFillPaintTransformer(colorNodes(color));
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-		addCapacity(capacity,vv);
+		//addCapacity(capacity,vv);
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
         return vv;
 	}
 	
 	public Graph<String, String> getGraph(int numOfNodes, ArrayList<HashMap<Integer, Integer>> lstEdges) {
-		g = new DirectedOrderedSparseMultigraph<String, String>();
+		g = new DirectedSparseGraph<String, String>();
 
 		for (int i = 0; i < numOfNodes; i++) {
 			if (i == numOfNodes - 1)
@@ -114,8 +115,7 @@ public class GraphView {
 					if (lstEdges.get(j).get(i) == numOfNodes - 1)
 						g.addEdge(String.valueOf(j), nodes[i].name(), nodes[nodes.length - 1].toString());
 					else if (i == numOfNodes - 1)
-						g.addEdge(String.valueOf(j), nodes[nodes.length - 1].name(),
-								nodes[lstEdges.get(j).get(i)].name());
+						g.addEdge(String.valueOf(j), nodes[nodes.length - 1].name(),nodes[lstEdges.get(j).get(i)].name());
 					else
 						g.addEdge(String.valueOf(j), nodes[i].name(), nodes[lstEdges.get(j).get(i)].name());
 			}
@@ -135,15 +135,14 @@ public class GraphView {
 				g.addVertex((String) nodes[lstNodes.get(i)].name());
 		}
 		
-//			for (int i = 0; i < numOfNodes; i++) {
-//					if (i == 0)
-//						g.addEdge(String.valueOf(i), nodes[i].name(), nodes[nodes.length - 1].toString());
-//					else if (i == numOfNodes - 1)
-//						g.addEdge(String.valueOf(i), nodes[nodes.length - 1].name(),
-//								nodes[lstEdges.get(i).get(i)].name());
-//					else
-//						g.addEdge(String.valueOf(j), nodes[i].name(), nodes[lstEdges.get(j).get(i)].name());
-//			}
+			for (int i = 0; i < numOfNodes; i++) {
+					if (i == 0)
+						g.addEdge(String.valueOf(i), nodes[i].name(), nodes[nodes.length - 1].toString());
+				//	else if (i == numOfNodes - 1)
+						//g.addEdge(String.valueOf(i), nodes[nodes.length - 1].name(),nodes[]);
+					//else
+					//	g.addEdge(String.valueOf(i), nodes[i].name(), nodes[lstEdges.get(j).get(i)].name());
+			}
 
 		
 		return g;

@@ -45,8 +45,8 @@ public class FlowNetwork {
 			int w = StdRandom.uniform(V);
 			double capacity = StdRandom.uniform(5, 20);
 			lstCapacity.add("0/" + String.valueOf(capacity));
-			addEdge(new FlowEdge(v, w, capacity),V-1);
-			edges();
+			addEdge(new FlowEdge(v, w, capacity), V - 1);
+			addMissingEdges();
 		}
 	}
 
@@ -82,47 +82,100 @@ public class FlowNetwork {
 	 *                                  {@code 0} and {@code V-1}
 	 */
 
-	public void addEdge(FlowEdge e , int sink) {
+	public void addEdge(FlowEdge e, int sink) {
+		setEdge(e, sink);
+		E++;
+	}
+
+	public void setEdge(FlowEdge e, int sink) {
 		int v = e.from();
 		int w = e.to();
 		validateVertex(v);
 		validateVertex(w);
-		
-		if(!isSource(w) && !isSink(v, sink) && !isEdgeExists(v,w)) {
+
+		if (!isSource(w) && !isSink(v, sink) && !isEdgeExist(v, w)) {
 			adj[v].add(e);
 			adj[w].add(e);
-			lstEdges.add(edge(v,w));
-			E++;
-		}	
+			lstEdges.add(edge(v, w));
+		}
 	}
-  
-	public HashMap<Integer, Integer> edge(int v , int w){
+	
+	public HashMap<Integer, Integer> edge(int v, int w) {
 		HashMap<Integer, Integer> edgs = new HashMap<Integer, Integer>();
 		edgs.put(v, w);
 		return edgs;
 	}
-	
-	
-	public boolean isEdgeExists(int v , int w) {
-		return lstEdges.contains(edge(v , w));
-	}
-	
-	
-	public boolean isSink(int e , int sink) {
+
+	public boolean isSink(int e, int sink) {
 		return (e == sink);
 	}
-	
-	public boolean isSource(int e ) {
+
+	public boolean isSource(int e) {
 		return (e == 0);
 	}
-	public boolean hasFromEdge() {
-		return true;
+
+	public boolean isEdgeExist(int v, int w) {
+		boolean isExists = false;
+		for (int i = 0; i < V(); i++) {
+			for (FlowEdge e : adj(i)) {
+				if (e.from() == v && e.to() == w) {
+					isExists = true;
+					break;
+				}
+			}
+			if (isExists)
+				break;
+		}
+		return isExists;
 	}
-	
-	public boolean hasToEdge() {
-		return true;	
+
+	public boolean hasFromEdge(int v) {
+		boolean hasFrom = false;
+		for (int i = 0; i < V(); i++) {
+			for (FlowEdge e : adj(i)) {
+				if (e.from() == v) {
+					hasFrom = true;
+					break;
+				}
+			}
+			if (hasFrom)
+				break;
+		}
+
+		return hasFrom;
 	}
-	
+
+	public boolean hasToEdge(int w) {
+		boolean hasTo = false;
+		for (int i = 0; i < V(); i++) {
+			for (FlowEdge e : adj(i)) {
+				if (e.to() == w) {
+					hasTo = true;
+					break;
+				}
+			}
+			if (hasTo)
+				break;
+		}
+		return hasTo;
+	}
+
+	public void addMissingEdges() {
+		for (int i = 0; i < V(); i++) {
+			if (!hasFromEdge(i)) {
+				int w = StdRandom.uniform(V);
+				double capacity = StdRandom.uniform(5, 20);
+				setEdge(new FlowEdge(i, w, capacity), V - 1);
+			}
+
+			if (!hasToEdge(i)) {
+				int v = StdRandom.uniform(V);
+				double capacity = StdRandom.uniform(5, 20);
+				setEdge(new FlowEdge(v, i, capacity), V - 1);
+			}
+		}
+	}
+
 	/**
 	 * Returns the edges incident on vertex {@code v} (includes both edges pointing
 	 * to and from {@code v}).
@@ -146,9 +199,7 @@ public class FlowNetwork {
 			}
 		return list;
 	}
- 
 
-	
 	/**
 	 * Returns a string representation of the flow network. This method takes time
 	 * proportional to <em>E</em> + <em>V</em>.

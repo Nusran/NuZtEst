@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class FordFulkerson {
@@ -179,23 +180,26 @@ public class FordFulkerson {
 		int s = 0, t = V - 1;
 		FlowNetwork G = new FlowNetwork(V, E);
 		StdOut.println(G);
-
+		HashSet<Integer> set1=new HashSet<Integer>();
 		// compute maximum flow and minimum cut
 		FordFulkerson maxflow = new FordFulkerson(G, s, t);
 		StdOut.println("Max flow from 0 to " + t);
 		for (int v = 0; v < G.V(); v++) {
 			for (FlowEdge e : G.adj(v)) {
 				if ((v == e.from()) && e.flow() > 0) {
-					StdOut.println("   " + e);
+					StdOut.println(" ============= " + e);
 					StdOut.println(e.from() + "," + e.to());
+					
 				}
+				set1.add(e.to());
 			}
 		}
-
 		StdOut.println("Max flow value = " + maxflow.value());
-		StdOut.println(lstAugPaths);
-		GraphView view = new GraphView(FlowNetwork.adj.length, FlowNetwork.lstEdges,FlowNetwork.lstCapacity,lstAugPaths);
-		System.out.println(FlowNetwork.adj.length+"-----"+FlowNetwork.lstEdges.size());
+		System.out.println(set1);
+	//	StdOut.println(lstAugPaths);
+	//	GraphView view = new GraphView(FlowNetwork.adj.length, FlowNetwork.lstEdges,FlowNetwork.lstCapacity,lstAugPaths);
+	//	System.out.println(FlowNetwork.adj.length+"-----"+FlowNetwork.lstEdges.size());
+		GraphViews view = new GraphViews(FlowNetwork.adj.length, FlowNetwork.adj,lstAugPaths);
 	}
 
 }
