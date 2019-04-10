@@ -30,7 +30,7 @@ enum Nodes {
 
 public class GraphView {
 
-	private static NodesNames[] nodes = NodesNames.values();
+	private static Nodes[] nodes = Nodes.values();
 	private static Graph<String, String> g;
 	private static int count = 0;
 	

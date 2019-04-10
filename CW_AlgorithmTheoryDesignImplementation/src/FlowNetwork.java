@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-/*Test*/
+
 public class FlowNetwork {
 	private static final String NEWLINE = System.getProperty("line.separator");
 

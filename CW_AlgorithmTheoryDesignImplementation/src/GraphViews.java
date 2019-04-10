@@ -25,7 +25,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 
-enum NodesNames {
+enum Nodes {
 	A, B, C, D, E, F, G, H, I, J, K, L
 }
 
@@ -33,15 +33,16 @@ public class GraphViews {
 
 	private static Nodes[] nodes = Nodes.values();
 	private static Graph<String, String> g;
+	private static int E = 0;
 	private static int count = 0;
 	private static HashMap<String, Paint> colorNodes  = new HashMap<String, Paint> ();
-
+	private static HashMap<String, String> lblEdges  = new HashMap<String, String> ();
+	
 	public GraphViews(int numOfNodes, Bag<FlowEdge>[] adj, ArrayList<ArrayList<Integer>> AugemntPaths) {
 		
 		reSetColor();
 		Graph<String, String> graph = getGraph(numOfNodes, adj);
-		BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes);
-		
+		BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes,lblEdges);	
 		JFrame frame = new JFrame("Graph");
 		JButton btnAugPath = new JButton("Augmenting Path");
 		JPanel pnlBase = new JPanel();
@@ -56,11 +57,10 @@ public class GraphViews {
 			public void actionPerformed(ActionEvent e) {
 				if (count < AugemntPaths.size()) {
 					setAugmentingNode(AugemntPaths.get(count));
-					BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes);
+					BasicVisualizationServer<String, String> vv = getVisualaization(graph, colorNodes,lblEdges);
 					JOptionPane.showMessageDialog(frame, vv);
 					reSetColor();
-					count++;
-					
+					count++;		
 				} else {
 					JOptionPane.showMessageDialog(frame, "!No Augmenting paths to display.");
 				}
@@ -76,11 +76,11 @@ public class GraphViews {
 		}
 	}
 	
-	public static BasicVisualizationServer<String, String> getVisualaization(Graph g ,HashMap<String, Paint> colorNodes){
+	public static BasicVisualizationServer<String, String> getVisualaization(Graph g ,HashMap<String, Paint> colorNodes, HashMap<String, String> lblEdges){
 		BasicVisualizationServer<String, String> vv = getVisualLayout(g);
 		vv.getRenderContext().setVertexFillPaintTransformer(setColor(colorNodes));
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-		//addCapacity(capacity,vv);
+		vv.getRenderContext().setEdgeLabelTransformer(setCapacity(lblEdges));
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
         return vv;
 	}
@@ -92,15 +92,11 @@ public class GraphViews {
 		return visualLayout;
 	}
 
-	public static Transformer addCapacity(int edge, double capacity) {
+	public static Transformer setCapacity(HashMap<String, String> Capacity) {
 		Transformer<String, String> edgeLabel = new Transformer<String, String>() {
 			public String transform(String label) {
-				if (label.equals(Integer.toString(edge)))
-					return Double.toString(capacity);
-				else
-					return "";
+				return Capacity.get(label);				
 			}
-
 		};
 		return edgeLabel;
 	}
@@ -124,7 +120,6 @@ public class GraphViews {
 				g.addVertex((String) nodes[i].name());
 		}
 
-		int E = 0;
 		for (int i = 0; i < numOfNodes; i++) {
 			for (FlowEdge e : adj[i]) {
 				if (e.from() != e.to() && e.from() != numOfNodes - 1)
@@ -133,10 +128,10 @@ public class GraphViews {
 					else
 						g.addEdge(String.valueOf(E), nodes[e.from()].name(), nodes[e.to()].name());
 
+					lblEdges.put(String.valueOf(E),Double.toString( e.capacity()));
 				E++;
 			}
 		}
-
 		return g;
 	}
 	
