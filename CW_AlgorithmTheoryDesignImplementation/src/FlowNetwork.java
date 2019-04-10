@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FlowNetwork {
@@ -7,8 +6,6 @@ public class FlowNetwork {
 	private final int V;
 	private int E;
 	public static Bag<FlowEdge>[] adj;
-	public static ArrayList<HashMap<Integer, Integer>> lstEdges = new ArrayList<HashMap<Integer, Integer>>();
-	public static ArrayList<String> lstCapacity = new ArrayList<String>();
 
 	/**
 	 * Initializes an empty flow network with {@code V} vertices and 0 edges.
@@ -44,7 +41,6 @@ public class FlowNetwork {
 			int v = StdRandom.uniform(V);
 			int w = StdRandom.uniform(V);
 			double capacity = StdRandom.uniform(5, 20);
-			lstCapacity.add("0/" + String.valueOf(capacity));
 			addEdge(new FlowEdge(v, w, capacity), V - 1);
 			addMissingEdges();
 		}
@@ -96,7 +92,6 @@ public class FlowNetwork {
 		if (!isSource(w) && !isSink(v, sink) && !isEdgeExist(v, w)) {
 			adj[v].add(e);
 			adj[w].add(e);
-			lstEdges.add(edge(v, w));
 		}
 	}
 	
