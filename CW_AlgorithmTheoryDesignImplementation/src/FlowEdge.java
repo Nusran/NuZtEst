@@ -1,13 +1,12 @@
-import java.util.HashMap;
-
 public class FlowEdge {
 	private final int v, w;
 	private final double capacity;
 	private double flow;
 
-	public FlowEdge(int v, int w, double capacity) {
+	public FlowEdge(int v, int w, double flow,double capacity) {
 		this.v = v;
 		this.w = w;
+		this.flow = flow;
 		this.capacity = capacity;
 	}
 
@@ -63,10 +62,4 @@ public class FlowEdge {
 		return v + "->" + w + " " + flow + "/" + capacity;
 	}
 	
-	public HashMap<Integer, Integer> toList() {
-		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-		map.put(v, w);
-		return map;
-	}
-
 }

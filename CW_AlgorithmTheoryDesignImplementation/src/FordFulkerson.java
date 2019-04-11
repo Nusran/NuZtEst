@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 public class FordFulkerson {
@@ -10,6 +9,8 @@ public class FordFulkerson {
 	private double value; // current value of max flow
 	public static ArrayList lstAugPaths;
 	public static ArrayList augNodes;
+	
+	
 	/**
 	 * Compute a maximum flow from vertex {@code s} to vertex {@code t}.
 	 * 
@@ -29,11 +30,7 @@ public class FordFulkerson {
 		augNodes = new ArrayList();
 		if (s == t)
 			throw new IllegalArgumentException("Source equals sink");
-		// if (!isFeasible(G, s, t)) throw new IllegalArgumentException("Initial flow is
-		// infeasible");
 		
-		// while there exists an augmenting path, use it
-		// value = excess(G, t);
 		while (hasAugmentingPath(G, s, t)) {
 			
 			// compute bottleneck capacity
@@ -41,7 +38,12 @@ public class FordFulkerson {
 			for (int v = t; v != s; v = edgeTo[v].other(v)) {
 				bottle = Math.min(bottle, edgeTo[v].residualCapacityTo(v));
 				System.out.println("===->" + edgeTo[v].from() + "," + edgeTo[v].to());
+				
+				G.adjAug[edgeTo[v].from()].add(edgeTo[v]);
+				G.adjAug[edgeTo[v].to()].add(edgeTo[v]);
+				
 				augNodes.add(edgeTo[v].to());
+				//augNodes.add(edgeTo[v]);
 				if(edgeTo[v].from()==0) {
 					augNodes.add(edgeTo[v].from());
 				    lstAugPaths.add(augNodes);
@@ -187,8 +189,15 @@ public class FordFulkerson {
 				}
 			}
 		}
-	
-			
+	  
+		for (int v = 0; v < G.V(); v++) {
+			for (FlowEdge e : G.adj(v)) {
+				StdOut.print(">>>> : "+e.from() +" , "+e.to());
+				StdOut.print(">>>> : "+e.capacity());
+				StdOut.println();
+			}
+		}
+		
 		StdOut.println("Max flow value = " + maxflow.value());
 		StdOut.println("Augmenting Path: "+lstAugPaths);
 		GraphViews view = new GraphViews(FlowNetwork.adj,lstAugPaths);

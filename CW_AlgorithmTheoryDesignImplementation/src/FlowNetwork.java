@@ -6,7 +6,7 @@ public class FlowNetwork {
 	private final int V;
 	private int E;
 	public static Bag<FlowEdge>[] adj;
-
+	public static Bag<FlowEdge>[] adjAug;
 	/**
 	 * Initializes an empty flow network with {@code V} vertices and 0 edges.
 	 * 
@@ -19,8 +19,11 @@ public class FlowNetwork {
 		this.V = V;
 		this.E = 0;
 		adj = (Bag<FlowEdge>[]) new Bag[V];
-		for (int v = 0; v < V; v++)
+		adjAug = (Bag<FlowEdge>[]) new Bag[V];
+		for (int v = 0; v < V; v++) {
 			adj[v] = new Bag<FlowEdge>();
+		    adjAug[v] = new Bag<FlowEdge>();
+		}
 	}
 
 	/**
@@ -40,8 +43,9 @@ public class FlowNetwork {
 		for (int i = 0; i < E; i++) {
 			int v = StdRandom.uniform(V);
 			int w = StdRandom.uniform(V);
+			double flow = 0;
 			double capacity = StdRandom.uniform(5, 20);
-			addEdge(new FlowEdge(v, w, capacity), V - 1);
+			addEdge(new FlowEdge(v, w, flow,capacity), V - 1);
 			addMissingEdges();
 		}
 	}
@@ -159,14 +163,16 @@ public class FlowNetwork {
 		for (int i = 0; i < V(); i++) {
 			if (!hasFromEdge(i)) {
 				int w = StdRandom.uniform(V);
+				double flow = 0;
 				double capacity = StdRandom.uniform(5, 20);
-				setEdge(new FlowEdge(i, w, capacity), V - 1);
+				setEdge(new FlowEdge(i, w,flow, capacity), V - 1);
 			}
 
 			if (!hasToEdge(i)) {
 				int v = StdRandom.uniform(V);
+				double flow = 0;
 				double capacity = StdRandom.uniform(5, 20);
-				setEdge(new FlowEdge(v, i, capacity), V - 1);
+				setEdge(new FlowEdge(v, i,flow, capacity), V - 1);
 			}
 		}
 	}
@@ -182,6 +188,11 @@ public class FlowNetwork {
 	public Iterable<FlowEdge> adj(int v) {
 		validateVertex(v);
 		return adj[v];
+	}
+	
+	public Iterable<FlowEdge> adjA(int v) {
+		validateVertex(v);
+		return adjAug[v];
 	}
 
 	// return list of all edges - excludes self loops

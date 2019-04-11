@@ -9,9 +9,10 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
+import java.awt.FlowLayout;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -46,14 +47,27 @@ public class GraphViews {
 		reSetColor();
 		g = getGraph();
 		BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes,lblEdges);	
+	
 		JFrame frame = new JFrame("Graph");
 		JButton btnAugPath = new JButton("Augmenting Path");
+		JLabel lblMaxFlow = new JLabel("0");
 		JPanel pnlBase = new JPanel();
-		frame.setLocation(100, 100);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(pnlBase);
-		pnlBase.add(vv);
+		JPanel pnlGraph = new JPanel();	
+	
+		pnlGraph.add(vv);
+		
+		pnlBase.setLayout(new FlowLayout());		
+		pnlBase.add(pnlGraph);
+		pnlBase.add(lblMaxFlow);
 		pnlBase.add(btnAugPath);
+
+		frame.add(pnlBase);
+		frame.setSize(300, 300);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
+		
 		btnAugPath.addActionListener(new ActionListener() {
 
 			@Override
@@ -62,6 +76,7 @@ public class GraphViews {
 					setAugmentingNode(AugemntPaths.get(count));
 					BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes,lblEdges);
 					JOptionPane.showMessageDialog(frame, vv);
+					
 					reSetColor();
 					count++;		
 				} else {
@@ -130,8 +145,8 @@ public class GraphViews {
 						g.addEdge(String.valueOf(E), nodes[e.from()].name(), nodes[nodes.length - 1].toString());
 					else
 						g.addEdge(String.valueOf(E), nodes[e.from()].name(), nodes[e.to()].name());
-
-					lblEdges.put(String.valueOf(E),Double.toString( e.capacity()));
+					
+					lblEdges.put(String.valueOf(E)," 0 /"+e.capacity());
 				E++;
 			}
 		}
