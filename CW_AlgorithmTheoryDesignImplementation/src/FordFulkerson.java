@@ -2,14 +2,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class FordFulkerson {
+	
 	private static final double FLOATING_POINT_EPSILON = 1E-11;
 	private static int V; // number of vertices
 	private boolean[] marked; // marked[v] = true iff s->v path in residual graph
 	public static FlowEdge[] edgeTo; // edgeTo[v] = last edge on shortest residual s->v path
 	private double value; // current value of max flow
 	public static ArrayList lstAugPaths;
-	public static ArrayList augNodes;
-	
 	
 	/**
 	 * Compute a maximum flow from vertex {@code s} to vertex {@code t}.
@@ -23,11 +22,15 @@ public class FordFulkerson {
 	 * @throws IllegalArgumentException if initial flow is infeasible
 	 */
 	public FordFulkerson(FlowNetwork G, int s, int t) {
+		
 		V = G.V();
 		validate(s);
 		validate(t);
+		
 		lstAugPaths = new ArrayList();
-		augNodes = new ArrayList();
+		AugmentingPath ap = new AugmentingPath();
+		ap.augNodes = new ArrayList();
+		
 		if (s == t)
 			throw new IllegalArgumentException("Source equals sink");
 		
@@ -37,17 +40,13 @@ public class FordFulkerson {
 			double bottle = Double.POSITIVE_INFINITY;
 			for (int v = t; v != s; v = edgeTo[v].other(v)) {
 				bottle = Math.min(bottle, edgeTo[v].residualCapacityTo(v));
-				System.out.println("===->" + edgeTo[v].from() + "," + edgeTo[v].to());
-				
-				G.adjAug[edgeTo[v].from()].add(edgeTo[v]);
-				G.adjAug[edgeTo[v].to()].add(edgeTo[v]);
-				
-				augNodes.add(edgeTo[v].to());
-				//augNodes.add(edgeTo[v]);
+				ap.augNodes.add(edgeTo[v].to());
 				if(edgeTo[v].from()==0) {
-					augNodes.add(edgeTo[v].from());
-				    lstAugPaths.add(augNodes);
-				    augNodes = new ArrayList();
+					ap.augNodes.add(edgeTo[v].from());
+				    ap.flowCapacity = bottle+" / "+edgeTo[v].capacity(); 
+					lstAugPaths.add(ap);
+					ap = new AugmentingPath();
+					ap.augNodes = new ArrayList();
 				}
 			}
 			// augment flow
@@ -184,23 +183,34 @@ public class FordFulkerson {
 		for (int v = 0; v < G.V(); v++) {
 			for (FlowEdge e : G.adj(v)) {
 				if ((v == e.from()) && e.flow() > 0) {
-					StdOut.println(" ============= " + e);
-					StdOut.println(e.from() + "," + e.to());			
+					StdOut.println(e);			
 				}
 			}
 		}
-	  
-		for (int v = 0; v < G.V(); v++) {
-			for (FlowEdge e : G.adj(v)) {
-				StdOut.print(">>>> : "+e.from() +" , "+e.to());
-				StdOut.print(">>>> : "+e.capacity());
-				StdOut.println();
-			}
-		}
-		
+	  	
 		StdOut.println("Max flow value = " + maxflow.value());
-		StdOut.println("Augmenting Path: "+lstAugPaths);
+		StdOut.println("Augmenting Path: "+lstAugPaths.toString());
 		GraphViews view = new GraphViews(FlowNetwork.adj,lstAugPaths);
 	}
 
+
+	
+}
+
+class AugmentingPath{
+	
+	ArrayList augNodes;
+	String flowCapacity;
+	
+	public String getFlowCapacity() {
+		return flowCapacity;
+	}
+
+	public ArrayList getAugNodes() {
+		return augNodes;
+	}
+	
+	public String toString() {
+		return augNodes+"->("+flowCapacity+")  ";
+	}
 }

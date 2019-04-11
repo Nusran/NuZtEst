@@ -1,18 +1,20 @@
 
+import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Paint;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.awt.FlowLayout;
+import javax.swing.border.EmptyBorder;
+
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
@@ -35,50 +37,54 @@ public class GraphViews {
 	private static int count = 0;
 	private static int numOfNodes;
 	private static Bag<FlowEdge>[] adj;
-	
-	private static HashMap<String, Paint> colorNodes  = new HashMap<String, Paint> ();
-	private static HashMap<String, String> lblEdges  = new HashMap<String, String> ();
-	
-	public GraphViews(Bag<FlowEdge>[] adj, ArrayList<ArrayList<Integer>> AugemntPaths) {
-		
+
+	private static HashMap<String, Paint> colorNodes = new HashMap<String, Paint>();
+	private static HashMap<String, String> lblEdges = new HashMap<String, String>();
+
+	private JFrame frame;
+	private JPanel contentPane;
+	private JPanel graphPanel;
+
+
+	public GraphViews(Bag<FlowEdge>[] adj, ArrayList<AugmentingPath> AugemntPaths) {
+
 		GraphViews.numOfNodes = adj.length;
 		GraphViews.adj = adj;
-		
+
 		reSetColor();
 		g = getGraph();
-		BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes,lblEdges);	
-	
-		JFrame frame = new JFrame("Graph");
-		JButton btnAugPath = new JButton("Augmenting Path");
-		JLabel lblMaxFlow = new JLabel("0");
-		JPanel pnlBase = new JPanel();
-		JPanel pnlGraph = new JPanel();	
-	
-		pnlGraph.add(vv);
-		
-		pnlBase.setLayout(new FlowLayout());		
-		pnlBase.add(pnlGraph);
-		pnlBase.add(lblMaxFlow);
-		pnlBase.add(btnAugPath);
+		BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes, lblEdges);
 
-		frame.add(pnlBase);
-		frame.setSize(300, 300);
-		frame.setLocationRelativeTo(null);
+		frame = new JFrame("Graph");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-		
-		btnAugPath.addActionListener(new ActionListener() {
+		frame.setBounds(100, 100, 204, 160);
+
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		graphPanel = new JPanel();
+		graphPanel.add(vv);
+
+		frame.setContentPane(contentPane);
+
+		Panel panel = new Panel();
+		contentPane.add(panel, BorderLayout.CENTER);
+
+		panel.add(graphPanel);
+
+		Button button = new Button("Augmenting Path");
+		contentPane.add(button, BorderLayout.SOUTH);
+
+		button.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (count < AugemntPaths.size()) {
 					setAugmentingNode(AugemntPaths.get(count));
-					BasicVisualizationServer<String, String> vv = getVisualaization(g, colorNodes,lblEdges);
-					JOptionPane.showMessageDialog(frame, vv);
-					
+					JOptionPane.showMessageDialog(frame, vv);	
 					reSetColor();
-					count++;		
+					count++;
 				} else {
 					JOptionPane.showMessageDialog(frame, "!No Augmenting paths to display.");
 				}
@@ -88,21 +94,22 @@ public class GraphViews {
 		frame.setVisible(true);
 	}
 
-	public static void reSetColor() { 
+	public static void reSetColor() {
 		for (int i = 0; i < nodes.length; i++) {
-			colorNodes.put(nodes[i].name(), Color.LIGHT_GRAY);
+			colorNodes.put(nodes[i].name(), Color.YELLOW);
 		}
 	}
-	
-	public static BasicVisualizationServer<String, String> getVisualaization(Graph g ,HashMap<String, Paint> colorNodes, HashMap<String, String> lblEdges){
+
+	public static BasicVisualizationServer<String, String> getVisualaization(Graph g, HashMap<String, Paint> colorNodes,HashMap<String, String> lblEdges) {
 		BasicVisualizationServer<String, String> vv = getVisualLayout(g);
 		vv.getRenderContext().setVertexFillPaintTransformer(setColor(colorNodes));
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderContext().setEdgeLabelTransformer(setCapacity(lblEdges));
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-        return vv;
+		//vv.getRenderContext().getEdgeLabelTransformer().;
+		return vv;
 	}
-	
+
 	public static BasicVisualizationServer<String, String> getVisualLayout(Graph g) {
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(400, 400));
@@ -113,7 +120,7 @@ public class GraphViews {
 	public static Transformer setCapacity(HashMap<String, String> Capacity) {
 		Transformer<String, String> edgeLabel = new Transformer<String, String>() {
 			public String transform(String label) {
-				return Capacity.get(label);				
+				return Capacity.get(label);
 			}
 		};
 		return edgeLabel;
@@ -145,18 +152,28 @@ public class GraphViews {
 						g.addEdge(String.valueOf(E), nodes[e.from()].name(), nodes[nodes.length - 1].toString());
 					else
 						g.addEdge(String.valueOf(E), nodes[e.from()].name(), nodes[e.to()].name());
-					
-					lblEdges.put(String.valueOf(E)," 0 /"+e.capacity());
+
+				lblEdges.put(String.valueOf(E), " 0 /" + e.capacity());
 				E++;
 			}
 		}
 		return g;
 	}
-	
-	public static void setAugmentingNode(ArrayList<Integer> lstNodes) {
+
+	public static void setAugmentingNode(AugmentingPath augmentingPath) {
+		ArrayList lstNodes = augmentingPath.getAugNodes();
+		
 		for (int i = 0; i < lstNodes.size(); i++) {
-			colorNodes.put(nodes[lstNodes.get(i)].name(), Color.GREEN);
+			colorNodes.put(nodes[(int)lstNodes.get(i)].name(), Color.GREEN);
 			colorNodes.put("L", Color.GREEN);
+			
+			if((int)lstNodes.get(i)!=0) {
+				String edge = g.findEdge(nodes[(int)lstNodes.get(i+1)].name(),nodes[(int)lstNodes.get(i)].name());
+				if(edge != null) lblEdges.put(edge,augmentingPath.getFlowCapacity());
+			}	
+			String edge = g.findEdge(nodes[(int)lstNodes.get(1)].name(),"L");
+			if(edge != null) lblEdges.put(edge,augmentingPath.getFlowCapacity());
 		}
+
 	}
 }

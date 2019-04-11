@@ -6,7 +6,7 @@ public class FlowNetwork {
 	private final int V;
 	private int E;
 	public static Bag<FlowEdge>[] adj;
-	public static Bag<FlowEdge>[] adjAug;
+	
 	/**
 	 * Initializes an empty flow network with {@code V} vertices and 0 edges.
 	 * 
@@ -19,10 +19,8 @@ public class FlowNetwork {
 		this.V = V;
 		this.E = 0;
 		adj = (Bag<FlowEdge>[]) new Bag[V];
-		adjAug = (Bag<FlowEdge>[]) new Bag[V];
 		for (int v = 0; v < V; v++) {
 			adj[v] = new Bag<FlowEdge>();
-		    adjAug[v] = new Bag<FlowEdge>();
 		}
 	}
 
@@ -190,11 +188,6 @@ public class FlowNetwork {
 		return adj[v];
 	}
 	
-	public Iterable<FlowEdge> adjA(int v) {
-		validateVertex(v);
-		return adjAug[v];
-	}
-
 	// return list of all edges - excludes self loops
 	public Iterable<FlowEdge> edges() {
 		Bag<FlowEdge> list = new Bag<FlowEdge>();
