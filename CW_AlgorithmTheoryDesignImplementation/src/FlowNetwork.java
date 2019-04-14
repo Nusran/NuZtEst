@@ -1,3 +1,8 @@
+/**
+ * Student Name : Nusran Saleem
+ * Student ID : IIT-2016504 , UOW - w1628101
+ */
+
 import java.util.HashMap;
 
 public class FlowNetwork {
@@ -85,6 +90,12 @@ public class FlowNetwork {
 		E++;
 	}
 
+	/**
+	 * Set edge for flow network
+	 * @param e the edge
+	 * @param sink sink of the network
+	 * 
+	 */
 	public void setEdge(FlowEdge e, int sink) {
 		int v = e.from();
 		int w = e.to();
@@ -96,21 +107,32 @@ public class FlowNetwork {
 			adj[w].add(e);
 		}
 	}
-	
-	public HashMap<Integer, Integer> edge(int v, int w) {
-		HashMap<Integer, Integer> edgs = new HashMap<Integer, Integer>();
-		edgs.put(v, w);
-		return edgs;
-	}
+	/**
+	 * Validate sink
+	 * @param e the edge
+	 * @param sink sink of the network
+	 * 
+	 */
 
 	public boolean isSink(int e, int sink) {
 		return (e == sink);
 	}
 
+	/**
+	 * Validate source
+	 * @param e the edge
+	 * 
+	 */
 	public boolean isSource(int e) {
 		return (e == 0);
 	}
 
+	/**
+	 * Validate edge
+	 * @param v from node
+	 * @param w to node
+	 * 
+	 */
 	public boolean isEdgeExist(int v, int w) {
 		boolean isExists = false;
 		for (int i = 0; i < V(); i++) {
@@ -125,7 +147,10 @@ public class FlowNetwork {
 		}
 		return isExists;
 	}
-
+	/**
+	 * Validate from edge
+	 * @param v from
+	 */
 	public boolean hasFromEdge(int v) {
 		boolean hasFrom = false;
 		for (int i = 0; i < V(); i++) {
@@ -142,6 +167,10 @@ public class FlowNetwork {
 		return hasFrom;
 	}
 
+	/**
+	 * Validate to edge
+	 * @param w to
+	 */
 	public boolean hasToEdge(int w) {
 		boolean hasTo = false;
 		for (int i = 0; i < V(); i++) {
@@ -156,7 +185,9 @@ public class FlowNetwork {
 		}
 		return hasTo;
 	}
-
+	/**
+	 * Add missing edges to flow network
+	 */
 	public void addMissingEdges() {
 		for (int i = 0; i < V(); i++) {
 			if (!hasFromEdge(i)) {
@@ -176,8 +207,8 @@ public class FlowNetwork {
 	}
 
 	/**
-	 * Returns the edges incident on vertex {@code v} (includes both edges pointing
-	 * to and from {@code v}).
+	 * Returns the edges 
+	 * to and from V
 	 * 
 	 * @param v the vertex
 	 * @return the edges incident on vertex {@code v} as an Iterable

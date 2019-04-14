@@ -1,4 +1,9 @@
 
+/**
+ * Student Name : Nusran Saleem
+ * Student ID : IIT-2016504 , UOW - w1628101
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -75,7 +80,8 @@ public class GraphViews {
 
 		Button button = new Button("Augmenting Path");
 		contentPane.add(button, BorderLayout.SOUTH);
-
+		
+		/* Print augmenting path when button is clicked*/
 		button.addActionListener(new ActionListener() {
 
 			@Override
@@ -94,22 +100,36 @@ public class GraphViews {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Returns the number of edges in the edge-weighted graph.
+	 * 
+	 * @return the number of edges in the edge-weighted graph
+	 */
+	public int E() {
+		return E;
+	}
 	public static void reSetColor() {
 		for (int i = 0; i < nodes.length; i++) {
 			colorNodes.put(nodes[i].name(), Color.YELLOW);
 		}
 	}
-
+	/**
+	 * Returns the visualization of the graph
+	 * @return visualization with layout
+	 */
 	public static BasicVisualizationServer<String, String> getVisualaization(Graph g, HashMap<String, Paint> colorNodes,HashMap<String, String> lblEdges) {
 		BasicVisualizationServer<String, String> vv = getVisualLayout(g);
 		vv.getRenderContext().setVertexFillPaintTransformer(setColor(colorNodes));
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderContext().setEdgeLabelTransformer(setCapacity(lblEdges));
 		vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
-		//vv.getRenderContext().getEdgeLabelTransformer().;
 		return vv;
 	}
 
+	/**
+	 * Returns the visual layout of the graph
+	 * @return   layout
+	 */
 	public static BasicVisualizationServer<String, String> getVisualLayout(Graph g) {
 		Layout<String, String> layout = new CircleLayout<String, String>(g);
 		layout.setSize(new Dimension(400, 400));
@@ -117,6 +137,10 @@ public class GraphViews {
 		return visualLayout;
 	}
 
+	/**
+	 * get capacity for the edge
+	 * @return capacity
+	 */
 	public static Transformer setCapacity(HashMap<String, String> Capacity) {
 		Transformer<String, String> edgeLabel = new Transformer<String, String>() {
 			public String transform(String label) {
@@ -126,6 +150,9 @@ public class GraphViews {
 		return edgeLabel;
 	}
 
+	/**
+	 * Set color for the node
+	 */
 	public static Transformer setColor(HashMap<String, Paint> colorNodes) {
 		Transformer<String, Paint> vertexPaint = new Transformer<String, Paint>() {
 			public Paint transform(String i) {
@@ -135,6 +162,9 @@ public class GraphViews {
 		return vertexPaint;
 	}
 
+	/**
+	 * Set graph
+	 */
 	public static Graph<String, String> getGraph() {
 		g = new DirectedSparseGraph<String, String>();
 
@@ -159,7 +189,9 @@ public class GraphViews {
 		}
 		return g;
 	}
-
+	/**
+	 * Get augmenting path
+	 */
 	public static void setAugmentingNode(AugmentingPath augmentingPath) {
 		ArrayList lstNodes = augmentingPath.getAugNodes();
 		

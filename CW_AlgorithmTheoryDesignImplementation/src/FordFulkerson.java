@@ -1,3 +1,8 @@
+/**
+ * Student Name : Nusran Saleem
+ * Student ID : IIT-2016504 , UOW - w1628101
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -150,7 +155,7 @@ public class FordFulkerson {
 	}
 
 	public static int getVertices() {
-		return getRandomNumber(4, 10);
+		return getRandomNumber(6, 12);
 	}
 
 	public static int getRandomNumber(int min, int max) {
@@ -159,7 +164,7 @@ public class FordFulkerson {
 	}
 
 	public static int getEdges() {
-		return getRandomNumber(4, 20);
+		return getRandomNumber(6, 20);
 	}
 
 	/**
@@ -196,7 +201,10 @@ public class FordFulkerson {
 
 	
 }
-
+/**
+ * Student Name : Nusran Saleem
+ * Student ID : IIT-2016504 , UOW - w1628101
+ */
 class AugmentingPath{
 	
 	ArrayList augNodes;
