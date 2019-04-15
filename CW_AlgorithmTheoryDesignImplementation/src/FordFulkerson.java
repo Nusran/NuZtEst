@@ -177,7 +177,9 @@ public class FordFulkerson {
 		// create flow network with V vertices and E edges
 		int V = getVertices();
 		int E = getEdges();
-
+		
+	//	Stopwatch sw = new Stopwatch();
+		
 		int s = 0, t = V - 1;
 		FlowNetwork G = new FlowNetwork(V, E);
 		StdOut.println(G);
@@ -192,15 +194,17 @@ public class FordFulkerson {
 				}
 			}
 		}
-	  	
+	//	System.out.println("====>Elapsed time : "+sw.elapsedTime());
 		StdOut.println("Max flow value = " + maxflow.value());
 		StdOut.println("Augmenting Path: "+lstAugPaths.toString());
 		GraphViews view = new GraphViews(FlowNetwork.adj,lstAugPaths);
+		
+		
 	}
-
-
 	
 }
+
+
 /**
  * Student Name : Nusran Saleem
  * Student ID : IIT-2016504 , UOW - w1628101
@@ -222,3 +226,27 @@ class AugmentingPath{
 		return augNodes+"->("+flowCapacity+")  ";
 	}
 }
+
+class Stopwatch { 
+
+    private final long start;
+
+   /**
+     * Create a stopwatch object.
+     */
+    public Stopwatch() {
+        start = System.currentTimeMillis();
+    } 
+
+
+   /**
+     * Return elapsed time (in seconds) since this object was created.
+     */
+    public double elapsedTime() {
+        long now = System.currentTimeMillis();
+        return (now - start) / 1000.0;
+    }
+
+} 
+
+ 
