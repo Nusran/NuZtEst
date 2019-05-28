@@ -178,7 +178,7 @@ public class FordFulkerson {
 		int V = getVertices();
 		int E = getEdges();
 		
-	//	Stopwatch sw = new Stopwatch();
+		Stopwatch sw = new Stopwatch();
 		
 		int s = 0, t = V - 1;
 		FlowNetwork G = new FlowNetwork(V, E);
@@ -194,11 +194,11 @@ public class FordFulkerson {
 				}
 			}
 		}
-	//	System.out.println("====>Elapsed time : "+sw.elapsedTime());
+	
 		StdOut.println("Max flow value = " + maxflow.value());
 		StdOut.println("Augmenting Path: "+lstAugPaths.toString());
 		GraphViews view = new GraphViews(FlowNetwork.adj,lstAugPaths);
-		
+		System.out.println("====>Elapsed time : "+sw.elapsedTime());
 		
 	}
 	

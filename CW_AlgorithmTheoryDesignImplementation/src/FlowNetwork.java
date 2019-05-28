@@ -3,8 +3,6 @@
  * Student ID : IIT-2016504 , UOW - w1628101
  */
 
-import java.util.HashMap;
-
 public class FlowNetwork {
 	private static final String NEWLINE = System.getProperty("line.separator");
 

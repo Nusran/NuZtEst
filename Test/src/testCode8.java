@@ -22,7 +22,7 @@ class Mailer {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			message.setSubject(sub);
 			message.setText(msg);
-	
+			message.setFileName("C:\\Users\\nusrans\\Desktop\\Samsung VP PO xml xsd\\Vendor.xml");
 			Transport.send(message);
 			System.out.println("message sent successfully");
 		} catch (MessagingException e) {
@@ -34,6 +34,6 @@ class Mailer {
 
 public class testCode8 {
 	public static void main(String[] args) {
-		Mailer.send("nusran7@gmail.com", "Iloveyoumom", "nusran7@gmail.com", "hello Nusran!", "How r u?");
+		Mailer.send("nusran7@gmail.com", "Iloveyoumom", "nusransaleem@gmail.com", "hello Nusran!", "How r u?");
 	}
 }
